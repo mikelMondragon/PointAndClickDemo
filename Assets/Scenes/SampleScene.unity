@@ -580,7 +580,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 690161658}
-  m_Layer: 0
+  - component: {fileID: 690161659}
+  m_Layer: 7
   m_Name: Walkables
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -603,6 +604,25 @@ Transform:
   - {fileID: 1892377086}
   m_Father: {fileID: 520348669}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &690161659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690161657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d72e5b7b88df71d4a98db50615696899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkableArea: {fileID: 1892377087}
+  cellSize: 0.25
+  gridBounds:
+    m_Center: {x: 0.0019741058, y: -5.4709, z: -0.032662835}
+    m_Extent: {x: 36.499527, y: 5.775639, z: 0.5}
+  boundsPadding: 0.5
+  agentRadius: 0.2
 --- !u!1 &693270016
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,8 +792,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8118372, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -814,13 +834,13 @@ MonoBehaviour:
   cam: {fileID: 519420031}
   interactableLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   walkableLayer:
     serializedVersion: 2
-    m_Bits: 0
-  spriteDefault: {fileID: 0}
-  spriteWalkable: {fileID: 0}
-  spriteInteractable: {fileID: 0}
+    m_Bits: 128
+  spriteDefault: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  spriteWalkable: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  spriteInteractable: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &1228286046
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,6 +919,9 @@ GameObject:
   - component: {fileID: 1562549960}
   - component: {fileID: 1562549959}
   - component: {fileID: 1562549962}
+  - component: {fileID: 1562549963}
+  - component: {fileID: 1562549964}
+  - component: {fileID: 1562549965}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -992,7 +1015,7 @@ Transform:
   m_GameObject: {fileID: 1562549958}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -7.85, y: -4.62, z: 0}
   m_LocalScale: {x: 25, y: 25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1010,6 +1033,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ede0cbc10a9444a8476ec90dd02357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pathProviderSource: {fileID: 690161659}
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  movement: {fileID: 1562549963}
+--- !u!114 &1562549963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562549958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252c760012366714fab4a7c2612b1892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  arriveThreshold: 0.05
+--- !u!114 &1562549964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562549958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b1b6055906a73143aa8a8e1f3cadfbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 1562549960}
+  movement: {fileID: 1562549963}
+  velocityThreshold: 0.01
+--- !u!114 &1562549965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562549958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98d91e003bf3234a9ceded437f7aae6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  yFar: 2.4
+  yNear: -10.65
+  scaleFar: 1
+  scaleNear: 20
 --- !u!1 &1892377085
 GameObject:
   m_ObjectHideFlags: 0
@@ -1020,7 +1093,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1892377086}
   - component: {fileID: 1892377087}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Walkable1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1142,7 +1215,6 @@ MonoBehaviour:
   playerInput: {fileID: 1228286047}
   cam: {fileID: 519420031}
   gamepadCursor: {fileID: 843419725}
-  gamepadCursorVisual: {fileID: 843419723}
 --- !u!4 &1969737589
 Transform:
   m_ObjectHideFlags: 0

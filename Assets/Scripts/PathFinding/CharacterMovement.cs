@@ -35,7 +35,8 @@ public class CharacterMovement : MonoBehaviour
         Vector2 pos = transform.position;
         Vector2 target = path[index];
 
-        float step = speed * Time.deltaTime;
+        // La escala actual (por profundidad) modula la velocidad: lejos = pequeño = más lento.
+        float step = speed * transform.localScale.x * Time.deltaTime;
         Vector2 next = Vector2.MoveTowards(pos, target, step);
 
         Velocity = Time.deltaTime > 0f ? (next - pos) / Time.deltaTime : Vector2.zero;
