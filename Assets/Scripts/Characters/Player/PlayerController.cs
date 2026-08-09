@@ -15,44 +15,51 @@ public class PlayerController : MonoBehaviour
     {
         pathProvider = pathProviderSource as IPathProvider;
         if (pathProvider == null)
+        {
             Debug.LogError($"{pathProviderSource} no implementa IPathProvider", this);
+            enabled = false;
+        }
     }
 
     void Update()
     {
+        if (PointerService.Instance == null) return;
         if (!PointerService.Instance.Current.IsPressed) return;
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
-        Vector2 world = PointerService.Instance.Current.WorldPosition;
-        ResolveClick(world);
+        ResolveClick(PointerService.Instance.Current.WorldPosition);
     }
 
     void ResolveClick(Vector2 world)
     {
-        Collider2D interactable = Physics2D.OverlapPoint(world, interactableLayer);
-        if (interactable != null)
-        {
-            if (interactable.GetComponent<IInteractable>()?.CanBeInteracted(gameObject) == true)
-            {
-                interactable.GetComponent<IInteractable>()?.Interact(gameObject);
-            }
-            else
-            {
-
-            }
-        }
-
-        if (pathProvider.TryGetPath(transform.position, world, pathBuffer))
-        {
-            movement.SetPath(pathBuffer);
-            DrawDebugPath();
-        }
-        else
-        {
-            Debug.Log("Destino inalcanzable.");
-        }
+        // Si el click resuelve una interacción, el personaje no se mueve.
+        // Si el objeto existe pero está fuera de alcance, caminamos hacia él.
+        if (TryInteract(world)) return;
+        MoveTo(world);
     }
 
+    bool TryInteract(Vector2 world)
+    {
+        Collider2D hit = Physics2D.OverlapPoint(world, interactableLayer);
+        if (hit == null) return false;
+
+        IInteractable interactable = hit.GetComponent<IInteractable>();
+        if (interactable == null || !interactable.CanBeInteracted(gameObject)) return false;
+
+        interactable.Interact(gameObject);
+        return true;
+    }
+
+    void MoveTo(Vector2 world)
+    {
+        // Destino inalcanzable: se ignora el click y se conserva la ruta actual.
+        if (!pathProvider.TryGetPath(transform.position, world, pathBuffer)) return;
+
+        movement.SetPath(pathBuffer);
+        DrawDebugPath();
+    }
+
+    [System.Diagnostics.Conditional("UNITY_EDITOR")]
     void DrawDebugPath()
     {
         Vector2 previous = transform.position;
