@@ -32,8 +32,14 @@ public class PlayerController : MonoBehaviour
         Collider2D interactable = Physics2D.OverlapPoint(world, interactableLayer);
         if (interactable != null)
         {
-            Debug.Log($"Clicked on: {interactable.gameObject.name}");
-            return;
+            if (interactable.GetComponent<IInteractable>()?.CanBeInteracted(gameObject) == true)
+            {
+                interactable.GetComponent<IInteractable>()?.Interact(gameObject);
+            }
+            else
+            {
+
+            }
         }
 
         if (pathProvider.TryGetPath(transform.position, world, pathBuffer))
