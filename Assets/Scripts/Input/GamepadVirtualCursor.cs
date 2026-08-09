@@ -1,37 +1,45 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GamepadVirtualCursor : MonoBehaviour, IPointerSource
+namespace PointAndClickDemo.Input
 {
-    [SerializeField] Camera cam;
-    [SerializeField] float speedPixelsPerSecond = 900f;
-    [SerializeField, Tooltip("Ignora ruido del stick por debajo de este valor")]
-    float deadzone = 0.15f;
-
-    Vector2 screenPos;
-
-    public Vector2 ScreenPosition => screenPos;
-    public Vector2 WorldPosition => cam.ScreenToWorldPoint(screenPos);
-    public bool IsPressed { get; private set; }
-
-    void Awake()
+    /// <summary>Virtual cursor driven by the gamepad's left stick.</summary>
+    public class GamepadVirtualCursor : MonoBehaviour, IPointerSource
     {
-        // Arranca centrado en pantalla.
-        screenPos = new Vector2(Screen.width, Screen.height) * 0.5f;
-    }
+        [SerializeField] private Camera cam;
+        [SerializeField] private float speedPixelsPerSecond = 900f;
 
-    void Update()
-    {
-        var gamepad = Gamepad.current;
-        if (gamepad == null) { IsPressed = false; return; }
+        [SerializeField]
+        [Tooltip("Ignores stick noise below this value")]
+        private float deadzone = 0.15f;
 
-        Vector2 stick = gamepad.leftStick.ReadValue();
-        if (stick.magnitude < deadzone) stick = Vector2.zero;
+        private Vector2 screenPosition;
 
-        screenPos += stick * speedPixelsPerSecond * Time.deltaTime;
-        screenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.width);
-        screenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.height);
+        public Vector2 ScreenPosition => screenPosition;
 
-        IsPressed = gamepad.buttonSouth.wasPressedThisFrame;
+        public Vector2 WorldPosition => cam.ScreenToWorldPoint(screenPosition);
+
+        // Read from the device on every access, same as MousePointerSource, so this does not
+        // depend on the execution order between this Update and whoever polls it.
+        public bool IsPressed => Gamepad.current != null && Gamepad.current.buttonSouth.wasPressedThisFrame;
+
+        private void Awake()
+        {
+            // Starts centred on screen.
+            screenPosition = new Vector2(Screen.width, Screen.height) * 0.5f;
+        }
+
+        private void Update()
+        {
+            Gamepad gamepad = Gamepad.current;
+            if (gamepad == null) return;
+
+            Vector2 stick = gamepad.leftStick.ReadValue();
+            if (stick.magnitude < deadzone) stick = Vector2.zero;
+
+            screenPosition += stick * (speedPixelsPerSecond * Time.deltaTime);
+            screenPosition.x = Mathf.Clamp(screenPosition.x, 0f, Screen.width);
+            screenPosition.y = Mathf.Clamp(screenPosition.y, 0f, Screen.height);
+        }
     }
 }

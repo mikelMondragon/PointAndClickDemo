@@ -470,6 +470,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 448419064}
   barColor: {r: 0, g: 0, b: 0, a: 1}
+  mode: 0
+  followTarget: {fileID: 0}
+  coverOverscan: 0.005
+  followDamping: {x: 0.5, y: 0.5}
+  horizontalDeadZone: 0.25
+  buildHud: 1
 --- !u!1 &520348668
 GameObject:
   m_ObjectHideFlags: 0
@@ -903,7 +909,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21fade6ada0ab4149b9859127826d9ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionDistance: 2
+  interactionDistance: 10
 --- !u!212 &861702961
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1264,6 +1270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 1562549960}
   movement: {fileID: 1562549963}
+  animator: {fileID: 0}
   velocityThreshold: 0.01
 --- !u!114 &1562549965
 MonoBehaviour:

@@ -1,7 +1,12 @@
 using UnityEngine;
 
-public interface IInteractable
+namespace PointAndClickDemo.Interactables
 {
-    void Interact(GameObject instigator);
-    bool CanBeInteracted(GameObject instigator);
+    /// <summary>Something in the scene the player can interact with by clicking it.</summary>
+    public interface IInteractable
+    {
+        bool CanBeInteracted(GameObject instigator);
+
+        void Interact(GameObject instigator);
+    }
 }

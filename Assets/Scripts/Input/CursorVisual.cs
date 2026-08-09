@@ -1,39 +1,53 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class CursorVisual : MonoBehaviour
+namespace PointAndClickDemo.Input
 {
-    [SerializeField] RectTransform rectTransform;
-    [SerializeField] Canvas canvas;
-    [SerializeField] Camera cam;
-    [SerializeField] LayerMask interactableLayer;
-    [SerializeField] LayerMask walkableLayer;
-
-    [Header("Sprites por estado")]
-    [SerializeField] Sprite spriteDefault;
-    [SerializeField] Sprite spriteWalkable;
-    [SerializeField] Sprite spriteInteractable;
-
-    UnityEngine.UI.Image image;
-
-    void Awake() => image = GetComponent<UnityEngine.UI.Image>();
-
-    void LateUpdate()
+    /// <summary>
+    /// Draws the custom cursor and swaps its sprite based on what sits under the pointer.
+    /// </summary>
+    [RequireComponent(typeof(Image))]
+    public class CursorVisual : MonoBehaviour
     {
-        var pointer = PointerService.Instance.Current;
+        [SerializeField] private RectTransform rectTransform;
+        [SerializeField] private Canvas canvas;
+        [SerializeField] private Camera cam;
+        [SerializeField] private LayerMask interactableLayer;
+        [SerializeField] private LayerMask walkableLayer;
 
-        Vector2 fromCenter = pointer.ScreenPosition - new Vector2(Screen.width, Screen.height) * 0.5f;
-        rectTransform.anchoredPosition = fromCenter / canvas.scaleFactor;
+        [Header("Sprites per state")]
+        [SerializeField] private Sprite spriteDefault;
+        [SerializeField] private Sprite spriteWalkable;
+        [SerializeField] private Sprite spriteInteractable;
 
-        UpdateSprite(pointer.WorldPosition);
-    }
+        private Image image;
 
-    void UpdateSprite(Vector2 worldPoint)
-    {
-        if (Physics2D.OverlapPoint(worldPoint, interactableLayer) != null)
-            image.sprite = spriteInteractable;
-        else if (Physics2D.OverlapPoint(worldPoint, walkableLayer) != null)
-            image.sprite = spriteWalkable;
-        else
-            image.sprite = spriteDefault;
+        private void Awake()
+        {
+            image = GetComponent<Image>();
+            if (rectTransform == null) rectTransform = (RectTransform)transform;
+        }
+
+        private void LateUpdate()
+        {
+            if (PointerService.Instance == null) return;
+
+            IPointerSource pointer = PointerService.Instance.Current;
+
+            Vector2 fromCenter = pointer.ScreenPosition - new Vector2(Screen.width, Screen.height) * 0.5f;
+            rectTransform.anchoredPosition = fromCenter / canvas.scaleFactor;
+
+            UpdateSprite(pointer.WorldPosition);
+        }
+
+        private void UpdateSprite(Vector2 worldPoint)
+        {
+            if (Physics2D.OverlapPoint(worldPoint, interactableLayer) != null)
+                image.sprite = spriteInteractable;
+            else if (Physics2D.OverlapPoint(worldPoint, walkableLayer) != null)
+                image.sprite = spriteWalkable;
+            else
+                image.sprite = spriteDefault;
+        }
     }
 }

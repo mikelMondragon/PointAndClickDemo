@@ -1,36 +1,45 @@
 using UnityEngine;
 
-/// <summary>
-/// Traduce el estado de <see cref="CharacterMovement"/> a la capa visual:
-/// orienta el sprite y alimenta el parámetro "Speed" del Animator.
-/// </summary>
-[RequireComponent(typeof(Animator))]
-public class CharacterAnimator : MonoBehaviour
+namespace PointAndClickDemo.Characters
 {
-    static readonly int SpeedHash = Animator.StringToHash("Speed");
-
-    [SerializeField] SpriteRenderer spriteRenderer;
-    [SerializeField] CharacterMovement movement;
-    [SerializeField, Tooltip("Si se deja vacío se busca en este mismo GameObject")]
-    Animator animator;
-    [SerializeField, Tooltip("Velocidad mínima para considerar que hay movimiento horizontal real")]
-    float velocityThreshold = 0.01f;
-
-    void Awake()
+    /// <summary>
+    /// Translates <see cref="CharacterMovement"/> state into the visual layer:
+    /// faces the sprite and drives the Animator's "Speed" parameter.
+    /// </summary>
+    [RequireComponent(typeof(Animator))]
+    public class CharacterAnimator : MonoBehaviour
     {
-        if (animator == null) animator = GetComponent<Animator>();
-        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
-        if (movement == null) movement = GetComponent<CharacterMovement>();
-    }
+        private static readonly int SpeedHash = Animator.StringToHash("Speed");
 
-    void Update()
-    {
-        float scale = Mathf.Max(0.0001f, transform.localScale.x);
-        Vector2 velocity = movement.Velocity / scale;
+        [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField] private CharacterMovement movement;
 
-        animator.SetFloat(SpeedHash, velocity.magnitude);
+        [SerializeField]
+        [Tooltip("Left empty, it is looked up on this same GameObject")]
+        private Animator animator;
 
-        if (Mathf.Abs(velocity.x) > velocityThreshold)
-            spriteRenderer.flipX = velocity.x < 0f;
+        [SerializeField]
+        [Tooltip("Minimum speed to count as actual horizontal movement")]
+        private float velocityThreshold = 0.01f;
+
+        private void Awake()
+        {
+            if (animator == null) animator = GetComponent<Animator>();
+            if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+            if (movement == null) movement = GetComponent<CharacterMovement>();
+        }
+
+        private void Update()
+        {
+            // DepthScaler scales the transform and CharacterMovement multiplies the velocity
+            // by that scale. Normalising keeps the threshold independent of depth.
+            float scale = Mathf.Max(0.0001f, transform.localScale.x);
+            Vector2 velocity = movement.Velocity / scale;
+
+            animator.SetFloat(SpeedHash, velocity.magnitude);
+
+            if (Mathf.Abs(velocity.x) > velocityThreshold)
+                spriteRenderer.flipX = velocity.x < 0f;
+        }
     }
 }

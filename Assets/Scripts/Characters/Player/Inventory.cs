@@ -1,6 +1,10 @@
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+namespace PointAndClickDemo.Characters.Player
 {
-    public bool CanUseDoor = false;
+    /// <summary>What the player is carrying. Currently just the door key.</summary>
+    public class Inventory : MonoBehaviour
+    {
+        public bool CanUseDoor;
+    }
 }
