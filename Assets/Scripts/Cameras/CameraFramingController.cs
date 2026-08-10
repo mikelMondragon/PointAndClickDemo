@@ -1,6 +1,5 @@
 using System;
 using PointAndClickDemo.Characters.Player;
-using PointAndClickDemo.UI;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -46,11 +45,6 @@ namespace PointAndClickDemo.Cameras
         [Tooltip("Fraction of the screen the player can move across without dragging the camera")]
         private float horizontalDeadZone = 0.25f;
 
-        [Header("HUD")]
-        [SerializeField]
-        [Tooltip("Builds the mode dropdown at runtime")]
-        private bool buildHud = true;
-
         private Camera cam;
         private CinemachineBrain brain;
         private CinemachineCamera coverCamera;
@@ -87,7 +81,6 @@ namespace PointAndClickDemo.Cameras
             {
                 ResolveFollowTarget();
                 BuildCinemachineRig();
-                if (buildHud) CameraModeHud.Create(this);
             }
 
             ApplyMode();

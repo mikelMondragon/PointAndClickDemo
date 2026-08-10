@@ -8,7 +8,7 @@ Prueba técnica para **Mimical Studio**: una aventura gráfica point & click des
 
 ## Uso de la IA
 
-He usado IA para hacerme **code review** del proyecto: repasar el código buscando bugs, nomenclatura y discutir la arquitecturas. También me ha ayudado a redactar esta documentación.
+He usado IA para hacerme **code review** del proyecto: repasar el código buscando bugs, nomenclatura, comentar código y discutir la arquitectura. También me ha ayudado a redactar esta documentación.
 
 
 ---
@@ -62,7 +62,7 @@ También se ajustaron los Player Settings: ventana redimensionable, modo windowe
 
 ## Añadidos
 
-Más allá de los requisitos hay dos cosas: soporte de mando y un sistema de interactuables.
+Más allá de los requisitos hay tres cosas: soporte de mando, feedback en el cursor y un sistema de interactuables.
 
 ### Soporte de mando además de ratón
 
@@ -71,6 +71,12 @@ El juego acepta indistintamente **ratón y mando**. `PointerService` conmuta ent
 Con mando, `GamepadVirtualCursor` mueve un cursor virtual con el stick izquierdo y acciona con el botón sur. Como todo lo que consume el puntero habla con la interfaz y no con el ratón, añadir esta segunda fuente no obligó a tocar ni `PlayerController` ni el cursor en pantalla.
 
 He implementado esto por que me parece importante desarrollar el soporte de mando desde un principio en cualquier juego ya que facilita muchisimo cualquier port para un futuro.
+
+### Feedback en el cursor
+
+`CursorVisual` cambia sprite y color según lo que haya bajo el puntero: **azul** sobre un interactuable, **verde** sobre suelo transitable y **rojo** sobre cualquier otra cosa. Sale de dos `Physics2D.OverlapPoint` contra las layers correspondientes, y los interactuables tienen prioridad sobre el suelo porque están encima de él.
+
+Sprite y color se resuelven en la misma expresión a partir de un único estado, para que no puedan acabar describiendo cosas distintas.
 
 ### Interactables
 
@@ -97,6 +103,7 @@ Assets/Scripts/
 ├── Interactables/  IInteractable, recogibles y puerta
 ├── Pathfinding/    A* sobre rejilla e IPathProvider
 └── UI/             HUD de selección de modo de cámara
+    └── Editor/     herramienta para crear ese HUD en la escena
 ```
 
 Cada carpeta se corresponde con un namespace bajo `PointAndClickDemo`, y el código sigue las convenciones de nomenclatura recomendadas por Unity.
