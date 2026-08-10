@@ -471,11 +471,10 @@ MonoBehaviour:
   background: {fileID: 448419064}
   barColor: {r: 0, g: 0, b: 0, a: 1}
   mode: 0
-  followTarget: {fileID: 0}
+  followTarget: {fileID: 1562549961}
   coverOverscan: 0.005
   followDamping: {x: 0.5, y: 0.5}
   horizontalDeadZone: 0.25
-  buildHud: 1
 --- !u!1 &520348668
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,6 +862,9 @@ MonoBehaviour:
   spriteDefault: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   spriteWalkable: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   spriteInteractable: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  colorDefault: {r: 0.9, g: 0.28, b: 0.28, a: 1}
+  colorWalkable: {r: 0.36, g: 0.84, b: 0.42, a: 1}
+  colorInteractable: {r: 0.35, g: 0.68, b: 1, a: 1}
 --- !u!1 &861702958
 GameObject:
   m_ObjectHideFlags: 0
@@ -1270,7 +1272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 1562549960}
   movement: {fileID: 1562549963}
-  animator: {fileID: 0}
+  animator: {fileID: 1562549959}
   velocityThreshold: 0.01
 --- !u!114 &1562549965
 MonoBehaviour:

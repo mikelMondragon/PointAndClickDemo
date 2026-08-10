@@ -49,10 +49,16 @@ La velocidad se **normaliza por la escala de profundidad** antes de compararla c
 
 `CameraFraming` reduce el encuadre a una única fórmula: se calcula el ajuste por altura y por anchura, y **Contain toma el mayor** (cabe todo, sobra pantalla) mientras **Cover toma el menor** (llena la pantalla, sobra fondo). `CameraFramingController` la reevalúa cada vez que cambia el tamaño de la ventana, no cada frame.
 
-El fondo proporcionado es de 72 × 21.6 unidades, es decir **3.33:1**, mucho más panorámico que cualquier monitor. Con la estrategia *contain* a 16:9 casi la mitad de la pantalla queda en barras negras, así que hay dos modos seleccionables desde el HUD:
+El fondo proporcionado es de 72 × 21.6 unidades, es decir **3.33:1**, mucho más panorámico que cualquier monitor. Con la estrategia *contain* a 16:9 casi la mitad de la pantalla queda en barras negras, así que **hay dos tipos de cámara** entre los que se puede elegir:
 
-- **Contain**: se ve la escena entera de un vistazo, con barras. La cámara no se mueve.
+- **Contain**: se ve la escena entera de un vistazo, con barras arriba y abajo. La cámara es fija.
 - **Cover**: la cámara llena la pantalla y sigue al jugador con **Cinemachine** (`CinemachineCamera` + `PositionComposer` + `Confiner2D`), confinada a los límites del fondo. Sin barras de 4:3 a 21:9.
+
+#### Cómo cambiar de cámara
+
+Con el desplegable de la esquina superior izquierda, en ejecución. El cambio es inmediato y no hace falta reiniciar la escena: `CameraFramingController` recalcula el encuadre, activa o desactiva el rig de Cinemachine y recoloca la cámara en el mismo frame.
+
+![Desplegable para cambiar entre los dos modos de cámara](docs/camera-modes.png)
 
 Aquí sí he tirado de Cinemachine, al contrario que con el pathfinding: es un paquete con el que ya estoy acostumbrado a trabajar y es extremadamente configurable, así que el seguimiento, el suavizado, la zona muerta y el confinamiento a los bordes del fondo salen de ajustar componentes en vez de escribirlos.
 
@@ -102,8 +108,7 @@ Assets/Scripts/
 ├── Input/          abstracción de puntero: ratón y cursor de mando
 ├── Interactables/  IInteractable, recogibles y puerta
 ├── Pathfinding/    A* sobre rejilla e IPathProvider
-└── UI/             HUD de selección de modo de cámara
-    └── Editor/     herramienta para crear ese HUD en la escena
+
 ```
 
 Cada carpeta se corresponde con un namespace bajo `PointAndClickDemo`, y el código sigue las convenciones de nomenclatura recomendadas por Unity.
